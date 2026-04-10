@@ -1,0 +1,5 @@
+A few implementation notes:
+
+Use FastAPI over a JSON file for payload comparison — it gives you proper request validation, async support, and easy audit logging via middleware. A JSON file works for prototyping but breaks under concurrency.
+For log history, store each pipeline stage (extraction JSON, comparison result, decision) as a separate record linked by submission_id — makes audit trails clean and queryable.
+For the day-wise view in the UI, the day_wise_comparison array in the comparison output maps directly to a table row per date, so you can render it as-is.

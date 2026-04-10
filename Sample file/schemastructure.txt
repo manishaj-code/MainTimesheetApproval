@@ -1,0 +1,180 @@
+class TimesheetReviewResponseSchema(BaseModel):
+
+    """
+
+    Structured response generated after analyzing timesheet content.
+
+ 
+
+    All fields must be populated ONLY if explicitly supported
+
+    by the provided input text.
+
+ 
+
+    Do NOT infer.
+
+    Do NOT assume.
+
+    Do NOT fabricate.
+
+    If uncertain → return null.
+
+    """
+
+    employee_name: Optional[str] = Field(
+
+        None,
+
+        description="Employee name explicitly written in the document text. If not clearly present → return null.",
+
+        example="Jameela Jasmin",
+
+    )
+
+ 
+
+    client_name: Optional[str] = Field(
+
+        None,
+
+        description="Client organization name explicitly written in the document text. If not clearly present → return null.",
+
+        example="Virtusa",
+
+    )
+
+ 
+
+    vendor_name: Optional[str] = Field(
+
+        None,
+
+        description="Vendor or staffing organization name explicitly written in the document text. If not clearly present → return null.",
+
+        example="Interact LLC",
+
+    )
+
+ 
+
+    timesheet_type: Optional[str] = Field(
+
+        None,
+
+        description="Timesheet period type (Weekly, Bi-Weekly, Monthly) ONLY if explicitly written. Do NOT infer from date range.",
+
+        example="Weekly",
+
+    )
+
+ 
+
+    start_date: date = Field(
+
+        ...,
+
+        description="Start date explicitly written in the document or input date range.",
+
+        example="2025-12-01",
+
+    )
+
+ 
+
+    end_date: date = Field(
+
+        ...,
+
+        description="End date explicitly written in the document or input date range.",
+
+        example="2025-12-07",
+
+    )
+
+ 
+
+    daily_entries: Optional[List[ProjectTimesheetEntry]] = Field(
+
+        default=[],
+
+        description=(
+
+            "List of project-wise breakdown of work entries including date and hours."
+
+            "AI may aggregate, restructure, or reorganize data logically."
+
+            "based on the input text."
+
+            "If no entries exist → return empty list []."
+
+        ),
+
+    )
+
+ 
+
+    total_hours: Optional[float] = Field(
+
+        default=0,
+
+        description=(
+
+            "Total hours explicitly written in the document. "
+
+            "If not explicitly written, calculate ONLY from extracted daily_entries "
+
+            "within the reporting period. "
+
+            "If calculation is not possible → return null."
+
+        ),
+
+        example=40.5,
+
+        ge=0,
+
+    )
+
+ 
+
+    timesheet_status: Optional[str] = Field(
+
+        default=None,
+
+        description=(
+
+            "Timesheet status ONLY if explicitly written as Approved, Pending, or Rejected. "
+
+            "Do NOT infer from signature, remarks, or context."
+
+        ),
+
+        example="Approved",
+
+    )
+
+ 
+
+    approver_signature: Optional[str] = Field(
+
+        default=None,
+
+        description=(
+
+            "Exact signature text block as written in the document. "
+
+            "Must contain explicit signature wording. "
+
+            "Return null if only approval name is present."
+
+        ),
+
+        example="John",
+
+    )
+
+ 
+ 
+ 
+ 

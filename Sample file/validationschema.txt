@@ -1,0 +1,236 @@
+class DailyTimesheetEntry(BaseModel):
+
+    """
+
+    Represents the number of hours worked on a specific date.
+
+    """
+
+    work_date: date = Field(
+
+        ...,
+
+        description="The calendar date for which the work hours are recorded.",
+
+        example="2026-01-15",
+
+    )
+
+ 
+
+    hours_worked: float = Field(
+
+        ...,
+
+        description="Total number of hours worked on the given date. Represent time in decimal format: 6 hrs 15 mins = 6.25, 6 hrs 30 mins = 6.50, 6 hrs 45 mins = 6.75",
+
+        example=8.25,
+
+        ge=0,
+
+        le=24,
+
+    )
+
+ 
+ 
+
+class ProjectTimesheetEntry(BaseModel):
+
+    """
+
+    Represents timesheet details for a single project.
+
+    """
+
+    project_name: Optional[str] = Field(
+
+        None,
+
+        description="Name of the project for which time is being logged.",
+
+        example="Website Redesign",
+
+    )
+
+ 
+
+    billing_type: str = Field(
+
+        ...,
+
+        description="Billing category of the project (e.g., billable, non-billable, OT and DT).",
+
+        example="Billable",
+
+    )
+
+ 
+
+    daily_entries: Optional[List[DailyTimesheetEntry]] = Field(
+
+        default=[],
+
+        description=(
+
+            "List of daily timesheet entries associated with this project."
+
+            "If no data is found, return an empty list."
+
+        ),
+
+        example=[
+
+            {"work_date": "2026-01-12", "hours_worked": 8},
+
+            {"work_date": "2026-01-13", "hours_worked": 8},
+
+            {"work_date": "2026-01-14", "hours_worked": 0},
+
+            {"work_date": "2026-01-15", "hours_worked": 8},
+
+            {"work_date": "2026-01-16", "hours_worked": 8},
+
+            {"work_date": "2026-01-17", "hours_worked": 0},
+
+            {"work_date": "2026-01-18", "hours_worked": 0},
+
+        ],
+
+    )
+
+ 
+ 
+
+class EmployeeTimesheet(BaseModel):
+
+    """
+
+    Represents an employee's timesheet for a given period.
+
+    """
+
+    employee_name: str = Field(
+
+        ...,
+
+        description="Full name of the employee submitting the timesheet.",
+
+        example="Jameela Jasmin",
+
+    )
+
+ 
+
+    employee_email: str = Field(
+
+        ...,
+
+        description="Official email address of the employee.",
+
+        example="rajkiran@softtunetech.com",
+
+    )
+
+ 
+
+    client_name: str = Field(
+
+        ...,
+
+        description="Name of the client for whom the work is performed.",
+
+        example="Virtusa",
+
+    )
+
+ 
+
+    vendor_name: str = Field(
+
+        ...,
+
+        description="Vendor or partner organization name.",
+
+        example="Interact LLC",
+
+    )
+
+ 
+
+    timesheet_type: str = Field(
+
+        ...,
+
+        description="Type of timesheet being submitted (e.g., Weekly, Bi-Weekly).",
+
+        example="Weekly",
+
+    )
+
+ 
+
+    week_start: str = Field(
+
+        ...,
+
+        description="Day on which the work week starts.",
+
+        example="Monday",
+
+    )
+
+ 
+
+    start_date: date = Field(
+
+        ...,
+
+        description="Start date of the timesheet period.",
+
+        example="2025-01-12",
+
+    )
+
+ 
+
+    end_date: date = Field(
+
+        ...,
+
+        description="End date of the timesheet period.",
+
+        example="2025-01-16",
+
+    )
+
+ 
+
+    attachment_urls: List[str] = Field(
+
+        default_factory=list,
+
+        description="List of URLs for supporting documents or attachments.",
+
+        example=[],
+
+        alias="attachment_url",
+
+    )
+
+ 
+
+    project_timesheets: List[ProjectTimesheetEntry] = Field(
+
+        ...,
+
+        description="Project-wise breakdown of timesheet entries.",
+
+        alias="timesheet_details",
+
+    )
+
+ 
+ 
+ 
+ 
